@@ -3,7 +3,7 @@ import "./App.css";
 import { prices } from "./webPrices";
 
 function App() {
-  //Estado para saber si se ha selecionado la ópción de página web. Al selecionarse, se despliega un div con las opciones adicionales. Al desseleccionar, desaparece.
+  //Estado para saber si se ha selecionado la ópción de página web. Al selecionarse, se despliega un div con las opciones adicionales. Al deseleccionar, desaparece.
 
   const [webChecked, setwebChecked] = useState(false);
   const showWebOption = (e) =>
@@ -17,7 +17,12 @@ function App() {
   const [pages, setPages] = useState(false);
   const [languages, setLanguages] = useState(false);
 
-  const webSelected = () => (web ? setWeb(false) : setWeb(true), adWeb());
+  const webSelected = () => (
+    web
+      ? setWeb(false) & setTotalPages(0) & setTotalLanguages(0)
+      : setWeb(true),
+    adWeb()
+  );
   const seoSelected = () => (seo ? setSeo(false) : setSeo(true), adSeo());
   const googleAdsSelected = () => (ads ? setAds(false) : setAds(true), adAds());
   const pagesSelected = (props) => (
@@ -47,29 +52,50 @@ function App() {
       : setTotalBasics(totalBasics + prices.googleAdsService$);
   };
 
-  // Calculo de las opciones adicionales
+  //Adquisición del numero de páginas e idiomas adicionales
+
+  const [totalPages, setTotalPages] = useState(0);
+  const adPages = (props) => {
+    setTotalPages(props.target.value);
+  };
+  const [totalLanguages, setTotalLanguages] = useState(0);
+  const adLanguages = (props) => {
+    setTotalLanguages(props.target.value);
+  };
+
+  //Calculo del precio total de las páginas e idiomas adicionales
 
   const [totalPagesPrice, setTotalPagesPrice] = useState(0);
-  const adPages = (props) => {
-    setTotalPagesPrice(props.target.value * prices.addPagesOnWeb$);
-  };
-
+  useEffect(() => {
+    setTotalPagesPrice(totalPages * prices.addPagesOnWeb$);
+  });
   const [totalLanguagesPrice, setTotalLanguagesPrice] = useState(0);
-  const adLanguages = (props) => {
-    setTotalLanguagesPrice(props.target.value * prices.addLanguagesOnWeb$);
-  };
+  useEffect(() => {
+    setTotalLanguagesPrice(totalLanguages * prices.addLanguagesOnWeb$);
+  });
+
+  //Calculo del total del precio total de las opciones adicionales
 
   const [totalOptions, setTotalOptions] = useState(0);
   useEffect(() => {
     setTotalOptions(totalPagesPrice + totalLanguagesPrice);
   }, [totalPagesPrice, totalLanguagesPrice]);
 
-  // Calculo del total. Basics + opciones
+  //Calculo del total. Basics + opciones adicionales
 
   const [total, setTotal] = useState(0);
   useEffect(() => {
     setTotal(totalBasics + totalOptions);
   }, [totalBasics, totalOptions]);
+
+  //Lógica de botones
+
+  const morePagesButton = () => {
+    console.log("Más páginas");
+  };
+  const lessPagesButton = () => {
+    console.log("Menos páginas");
+  };
 
   return (
     <div>
@@ -86,12 +112,14 @@ function App() {
           <>
             <div>
               Numero de pàgines:{""}
+              <input type="button" onClick={morePagesButton}></input>
               <input
                 type="text"
                 id="numPages"
                 placeholder="0"
                 onChange={pagesSelected}
               ></input>
+              <input type="button" onClick={lessPagesButton}></input>
             </div>
             <div>
               Numero d'idiomes:{""}

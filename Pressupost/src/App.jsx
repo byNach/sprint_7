@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { prices } from "./webPrices";
+import ButtonMore from "./assets/styles/styled-button";
+import OptionsDiv from "./assets/styles/styled-options-div";
+import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
 
 function App() {
   //Estado para saber si se ha selecionado la ópción de página web. Al selecionarse, se despliega un div con las opciones adicionales. Al deseleccionar, desaparece.
@@ -88,13 +91,24 @@ function App() {
     setTotal(totalBasics + totalOptions);
   }, [totalBasics, totalOptions]);
 
-  //Lógica de botones
+  //Lógica de botones para añadir o quitar páginas
 
   const morePagesButton = () => {
-    console.log("Más páginas");
+    setTotalPages(totalPages + 1);
   };
   const lessPagesButton = () => {
-    console.log("Menos páginas");
+    if (totalPages !== 0) {
+      setTotalPages(totalPages - 1);
+    }
+  };
+
+  const moreLanguagesButton = () => {
+    setTotalLanguages(totalLanguages + 1);
+  };
+  const lessLanguagesButton = () => {
+    if (totalLanguages !== 0) {
+      setTotalLanguages(totalLanguages - 1);
+    }
   };
 
   return (
@@ -109,28 +123,42 @@ function App() {
         ></input>
         Una pàgina web (500 €)
         {webChecked ? (
-          <>
+          <OptionsDiv>
             <div>
               Numero de pàgines:{""}
-              <input type="button" onClick={morePagesButton}></input>
+              <BsPlusCircle
+                style={{ color: "blue", fontSize: "20px" }}
+                onClick={morePagesButton}
+              ></BsPlusCircle>
               <input
                 type="text"
                 id="numPages"
-                placeholder="0"
+                value={totalPages}
                 onChange={pagesSelected}
               ></input>
-              <input type="button" onClick={lessPagesButton}></input>
+              <BsDashCircle
+                style={{ color: "red", fontSize: "20px" }}
+                onClick={lessPagesButton}
+              ></BsDashCircle>
             </div>
             <div>
               Numero d'idiomes:{""}
+              <BsPlusCircle
+                style={{ color: "blue", fontSize: "20px" }}
+                onClick={moreLanguagesButton}
+              ></BsPlusCircle>
               <input
                 type="text"
                 id="numLanguages"
-                placeholder="0"
+                value={totalLanguages}
                 onChange={languagesSelected}
               ></input>
+              <BsDashCircle
+                style={{ color: "red", fontSize: "20px" }}
+                onClick={lessLanguagesButton}
+              ></BsDashCircle>
             </div>
-          </>
+          </OptionsDiv>
         ) : (
           <div></div>
         )}

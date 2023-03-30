@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { prices } from "./webPrices";
-import ButtonMore from "./assets/styles/styled-button";
 import OptionsDiv from "./assets/styles/styled-options-div";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
 

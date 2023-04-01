@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { prices } from "./webPrices";
-import OptionsDiv from "./assets/styles/styled-options-div";
+import {OptionsGeneralDiv, OptionsDiv} from "./assets/styles/styled-options-div";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
 
 function App() {
@@ -122,8 +122,8 @@ function App() {
         ></input>
         Una pàgina web (500 €)
         {webChecked ? (
-          <OptionsDiv>
-            <div>
+          <OptionsGeneralDiv>
+            <OptionsDiv>
               Numero de pàgines:{""}
               <BsPlusCircle
                 style={{ color: "blue", fontSize: "20px" }}
@@ -139,8 +139,8 @@ function App() {
                 style={{ color: "red", fontSize: "20px" }}
                 onClick={lessPagesButton}
               ></BsDashCircle>
-            </div>
-            <div>
+            </OptionsDiv>
+            <OptionsDiv>
               Numero d'idiomes:{""}
               <BsPlusCircle
                 style={{ color: "blue", fontSize: "20px" }}
@@ -156,8 +156,8 @@ function App() {
                 style={{ color: "red", fontSize: "20px" }}
                 onClick={lessLanguagesButton}
               ></BsDashCircle>
-            </div>
-          </OptionsDiv>
+            </OptionsDiv>
+          </OptionsGeneralDiv>
         ) : (
           <div></div>
         )}

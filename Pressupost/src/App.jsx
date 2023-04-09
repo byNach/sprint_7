@@ -1,32 +1,58 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { prices } from "./webPrices";
-import {OptionsGeneralDiv, OptionsDiv} from "./assets/styles/styled-options-div";
+import {
+  OptionsGeneralDiv,
+  OptionsDiv,
+} from "./assets/styles/styled-options-div";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
 
 function App() {
-  //Estado para saber si se ha selecionado la ópción de página web. Al selecionarse, se despliega un div con las opciones adicionales. Al deseleccionar, desaparece.
+  // Todos los estados y obtención del localStorage
 
-  const [webChecked, setwebChecked] = useState(false);
+  const [webChecked, setwebChecked] = useState(
+    localStorage.getItem("webChecked") === "true"
+  );
+  const [web, setWeb] = useState(localStorage.getItem("web") === "true");
+  const [seo, setSeo] = useState(localStorage.getItem("seo") === "true");
+  const [ads, setAds] = useState(localStorage.getItem("ads") === "true");
+  const [pages, setPages] = useState(localStorage.getItem("pages") === "true");
+  const [languages, setLanguages] = useState(
+    localStorage.getItem("languages") === "true"
+  );
+  const [totalBasics, setTotalBasics] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalLanguages, setTotalLanguages] = useState(0);
+  const [totalPagesPrice, setTotalPagesPrice] = useState(0);
+  const [totalLanguagesPrice, setTotalLanguagesPrice] = useState(0);
+  const [totalOptions, setTotalOptions] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  //Lógica para saber si se ha selecionado la ópción de página web. Al selecionarse, se despliega un div con las opciones adicionales. Al deseleccionar, desaparece.
+
   const showWebOption = (e) =>
     e.target.checked ? setwebChecked(true) : setwebChecked(false);
+  useEffect(() => {
+    localStorage.setItem("webChecked", webChecked.toString());
+  }, [webChecked]);
 
-  //Estados para saber las opciones selecionadas
+  //Lógica para saber las opciones selecionadas
 
-  const [web, setWeb] = useState(false);
-  const [seo, setSeo] = useState(false);
-  const [ads, setAds] = useState(false);
-  const [pages, setPages] = useState(false);
-  const [languages, setLanguages] = useState(false);
-
-  const webSelected = () => (
+  const webSelected = () =>
     web
       ? setWeb(false) & setTotalPages(0) & setTotalLanguages(0)
-      : setWeb(true),
-    adWeb()
-  );
-  const seoSelected = () => (seo ? setSeo(false) : setSeo(true), adSeo());
-  const googleAdsSelected = () => (ads ? setAds(false) : setAds(true), adAds());
+      : setWeb(true);
+  useEffect(() => {
+    localStorage.setItem("web", web.toString());
+  }, [web]);
+  const seoSelected = () => (seo ? setSeo(false) : setSeo(true));
+  useEffect(() => {
+    localStorage.setItem("seo", seo.toString());
+  }, [seo]);
+  const googleAdsSelected = () => (ads ? setAds(false) : setAds(true));
+  useEffect(() => {
+    localStorage.setItem("ads", ads.toString());
+  }, [ads]);
   const pagesSelected = (props) => (
     pages ? setPages(false) : setPages(true), adPages(props)
   );
@@ -36,56 +62,49 @@ function App() {
 
   //Calculo del total de opciones básicas
 
-  const [totalBasics, setTotalBasics] = useState(0);
+  let webPrice = Number;
+  let seoPrice = Number;
+  let adsPrice = Number;
 
-  const adWeb = () => {
-    web
-      ? setTotalBasics(totalBasics - prices.webPage$)
-      : setTotalBasics(totalBasics + prices.webPage$);
-  };
-  const adSeo = () => {
-    seo
-      ? setTotalBasics(totalBasics - prices.seoConsulting$)
-      : setTotalBasics(totalBasics + prices.seoConsulting$);
-  };
-  const adAds = () => {
-    ads
-      ? setTotalBasics(totalBasics - prices.googleAdsService$)
-      : setTotalBasics(totalBasics + prices.googleAdsService$);
-  };
+  useEffect(() => {
+    web ? (webPrice = prices.webPage$) : (webPrice = 0);
+    seo ? (seoPrice = prices.seoConsulting$) : (seoPrice = 0);
+    ads ? (adsPrice = prices.googleAdsService$) : (adsPrice = 0);
+    setTotalBasics(webPrice + seoPrice + adsPrice);
+  }, [web, seo, ads]);
 
   //Adquisición del numero de páginas e idiomas adicionales
 
-  const [totalPages, setTotalPages] = useState(0);
   const adPages = (props) => {
     setTotalPages(props.target.value);
   };
-  const [totalLanguages, setTotalLanguages] = useState(0);
+  useEffect(() => {
+    localStorage.setItem("pages", totalPages.toString());
+  }, [totalPages]);
   const adLanguages = (props) => {
     setTotalLanguages(props.target.value);
   };
+  useEffect(() => {
+    localStorage.setItem("languages", totalLanguages.toString());
+  }, [totalLanguages]);
 
   //Calculo del precio total de las páginas e idiomas adicionales
 
-  const [totalPagesPrice, setTotalPagesPrice] = useState(0);
   useEffect(() => {
     setTotalPagesPrice(totalPages * prices.addPagesOnWeb$);
   });
-  const [totalLanguagesPrice, setTotalLanguagesPrice] = useState(0);
   useEffect(() => {
     setTotalLanguagesPrice(totalLanguages * prices.addLanguagesOnWeb$);
   });
 
   //Calculo del total del precio total de las opciones adicionales
 
-  const [totalOptions, setTotalOptions] = useState(0);
   useEffect(() => {
     setTotalOptions(totalPagesPrice + totalLanguagesPrice);
   }, [totalPagesPrice, totalLanguagesPrice]);
 
   //Calculo del total. Basics + opciones adicionales
 
-  const [total, setTotal] = useState(0);
   useEffect(() => {
     setTotal(totalBasics + totalOptions);
   }, [totalBasics, totalOptions]);
@@ -117,16 +136,22 @@ function App() {
         <input
           type="checkbox"
           id="webCheckbox"
+          checked={webChecked}
           onClick={showWebOption}
           onChange={webSelected}
         ></input>
-        Una pàgina web (500 €)
+        Pàgina web (500 €)
         {webChecked ? (
           <OptionsGeneralDiv>
             <OptionsDiv>
               Numero de pàgines:{""}
               <BsPlusCircle
-                style={{ color: "blue", fontSize: "20px" }}
+                style={{
+                  color: "blue",
+                  fontSize: "20px",
+                  marginLeft: "10px",
+                  marginRight: "10px",
+                }}
                 onClick={morePagesButton}
               ></BsPlusCircle>
               <input
@@ -136,14 +161,19 @@ function App() {
                 onChange={pagesSelected}
               ></input>
               <BsDashCircle
-                style={{ color: "red", fontSize: "20px" }}
+                style={{ color: "red", fontSize: "20px", marginLeft: "10px" }}
                 onClick={lessPagesButton}
               ></BsDashCircle>
             </OptionsDiv>
             <OptionsDiv>
               Numero d'idiomes:{""}
               <BsPlusCircle
-                style={{ color: "blue", fontSize: "20px" }}
+                style={{
+                  color: "blue",
+                  fontSize: "20px",
+                  marginLeft: "10px",
+                  marginRight: "10px",
+                }}
                 onClick={moreLanguagesButton}
               ></BsPlusCircle>
               <input
@@ -153,7 +183,7 @@ function App() {
                 onChange={languagesSelected}
               ></input>
               <BsDashCircle
-                style={{ color: "red", fontSize: "20px" }}
+                style={{ color: "red", fontSize: "20px", marginLeft: "10px" }}
                 onClick={lessLanguagesButton}
               ></BsDashCircle>
             </OptionsDiv>
@@ -163,16 +193,22 @@ function App() {
         )}
       </div>
       <div>
-        <input type="checkbox" id="seoCheckbox" onChange={seoSelected}></input>
-        Una consultoria SEO (300 €)
+        <input
+          type="checkbox"
+          id="seoCheckbox"
+          checked={seo}
+          onChange={seoSelected}
+        ></input>
+        Consultoria SEO (300 €)
       </div>
       <div>
         <input
           type="checkbox"
           id="googleAdsCheckbox"
+          checked={ads}
           onChange={googleAdsSelected}
         ></input>
-        Una campanya de Google Ads (200 €)
+        Campanya de Google Ads (200 €)
       </div>
       <div>Preu: {total} €</div>
     </div>

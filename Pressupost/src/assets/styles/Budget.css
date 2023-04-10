@@ -1,0 +1,25 @@
+body {
+margin: 30px;
+user-select: none;
+}
+
+.BsPlusCircle{
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color:blue;
+}
+.BsDashCircle{
+  font-size: 20px;
+  margin-left: 10px;
+  color:red;
+}
+
+.BsPlusCircle:active{
+background-color: blue;
+border-radius: 20px;
+}
+.BsDashCircle:active{
+ background-color: red;
+ border-radius: 20px;
+}

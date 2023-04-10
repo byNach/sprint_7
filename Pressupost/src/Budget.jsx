@@ -6,6 +6,7 @@ import {
   OptionsDiv,
 } from "./assets/styles/styled-options-div";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
+import "../src/assets/styles/Budget.css";
 
 const Budget = () => {
   // Todos los estados y obtención del localStorage
@@ -146,12 +147,7 @@ const Budget = () => {
             <OptionsDiv>
               Numero de pàgines:{""}
               <BsPlusCircle
-                style={{
-                  color: "blue",
-                  fontSize: "20px",
-                  marginLeft: "10px",
-                  marginRight: "10px",
-                }}
+                className="BsPlusCircle"
                 onClick={morePagesButton}
               ></BsPlusCircle>
               <input
@@ -161,19 +157,14 @@ const Budget = () => {
                 onChange={pagesSelected}
               ></input>
               <BsDashCircle
-                style={{ color: "red", fontSize: "20px", marginLeft: "10px" }}
+                className="BsDashCircle"
                 onClick={lessPagesButton}
               ></BsDashCircle>
             </OptionsDiv>
             <OptionsDiv>
               Numero d'idiomes:{""}
               <BsPlusCircle
-                style={{
-                  color: "blue",
-                  fontSize: "20px",
-                  marginLeft: "10px",
-                  marginRight: "10px",
-                }}
+                className="BsPlusCircle"
                 onClick={moreLanguagesButton}
               ></BsPlusCircle>
               <input
@@ -183,7 +174,7 @@ const Budget = () => {
                 onChange={languagesSelected}
               ></input>
               <BsDashCircle
-                style={{ color: "red", fontSize: "20px", marginLeft: "10px" }}
+                className="BsDashCircle"
                 onClick={lessLanguagesButton}
               ></BsDashCircle>
             </OptionsDiv>

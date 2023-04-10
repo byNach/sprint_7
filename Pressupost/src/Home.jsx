@@ -1,20 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { HomeBackground ,CalculadoraButton } from "./assets/styles/styled-home";
 
 const Home = () => {
   return (
-    <div>
+    <HomeBackground>
       <h1>Calculadora de presupost</h1>
       <p>
         La següent calculadora t'ajudarà a calcular l'import del teu projecte
         part per part.
       </p>
-      <button>
+      <CalculadoraButton>
         <Link className="Link" to="/Budget">
           Calculadora
         </Link>
-      </button>
-    </div>
+      </CalculadoraButton>
+    </HomeBackground>
   );
 };
 

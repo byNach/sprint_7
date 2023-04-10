@@ -213,6 +213,6 @@ const Budget = () => {
       <div>Preu: {total} €</div>
     </div>
   );
-}
+};
 
 export default Budget;

@@ -10,6 +10,6 @@ const OptionsGeneralDiv = styled.div`
 
 const OptionsDiv = styled.div`
 margin: 5px;
-
 `
-export {OptionsGeneralDiv, OptionsDiv}
+
+export { OptionsGeneralDiv, OptionsDiv }
